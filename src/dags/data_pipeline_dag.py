@@ -5,8 +5,7 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 
-from plugins.tasks import (fetch_historical_to_s3, process_data, store_data,
-                           cleanup)
+dags = importlib.import_module("git-dags")
 
 default_args = {
     'owner': 'agranimo',
@@ -29,7 +28,7 @@ kick_off_dag = DummyOperator(
 
 data_ingestion = PythonOperator(
     task_id='data_ingestion',
-    python_callable=fetch_historical_to_s3,
+    python_callable=dags.plugins.tasks.fetch_historical_to_s3,
     dag=dag,
 )
 
